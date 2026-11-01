@@ -349,6 +349,16 @@
           </div>
           <div class="social-actions"><button type="button" class="secondary-button" id="social-refresh"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i><span>โหลดรายการ</span></button><button type="button" class="primary-button compact-button" id="social-create"><i class="fa-solid fa-plus" aria-hidden="true"></i><span>สร้างรายการ</span></button></div>
           <div id="social-status" class="form-status" role="status"></div>
+          <form id="social-form" hidden aria-labelledby="social-form-title">
+            <h3 id="social-form-title" tabindex="-1">สร้างรายการ</h3>
+            <p id="social-form-hint" class="muted"></p>
+            <div id="social-fields" class="editor-grid"></div>
+            <p id="social-form-status" class="form-status" role="status"></p>
+            <div class="action-row">
+              <button type="submit" class="primary-button compact-button">บันทึกรายการ</button>
+              <button type="button" class="secondary-button" id="social-cancel">ยกเลิก</button>
+            </div>
+          </form>
           <div id="social-list" class="social-list" aria-live="polite"></div>
         </section>
 
