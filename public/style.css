@@ -244,6 +244,7 @@ i[class*="fa-"] { flex: none; }
 .dashboard-heading h1 { font-size: clamp(1.75rem, 3.2vw, 2.25rem); overflow-wrap: anywhere; }
 .dashboard-heading p { margin: 0.25rem 0 0; }
 .squad-workspace .dashboard-heading { margin-bottom: 1rem; }
+.workspace-heading-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 0.6rem; margin-left: auto; }
 
 .back-link {
   display: inline-flex;

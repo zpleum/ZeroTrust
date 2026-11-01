@@ -227,7 +227,7 @@
           </form>
         </section>
 
-        <section class="workspace-panel" aria-labelledby="invite-squad-title">
+        <section id="squad-invite-panel" class="workspace-panel" aria-labelledby="invite-squad-title">
           <h2 id="invite-squad-title"><span class="tile"><i class="fa-solid fa-link" aria-hidden="true"></i></span><span>สร้างคำเชิญ</span></h2>
           <form id="squad-invite-form" novalidate>
             <div class="field"><label for="invite-squad-id">ก๊วน</label><select id="invite-squad-id" name="squadId" required></select></div>
@@ -267,7 +267,10 @@
 
       <div class="dashboard-heading">
         <h1 id="workspace-title">พื้นที่ก๊วน</h1>
-        <button type="button" class="secondary-button" id="refresh-workspace"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i><span>รีเฟรชข้อมูล</span></button>
+        <div class="workspace-heading-actions">
+          <button type="button" class="primary-button compact-button" id="workspace-invite" aria-controls="squad-invite-panel" aria-expanded="false" hidden><i class="fa-solid fa-user-plus" aria-hidden="true"></i><span>เชิญเพื่อน</span></button>
+          <button type="button" class="secondary-button" id="refresh-workspace"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i><span>รีเฟรชข้อมูล</span></button>
+        </div>
       </div>
       <p id="workspace-status" class="form-status" role="status" tabindex="-1"></p>
 

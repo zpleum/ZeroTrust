@@ -268,6 +268,16 @@ function toast(message, tone = "success") {
   if (tone !== "error") setTimeout(() => { item.classList.remove("visible"); setTimeout(() => item.remove(), 180); }, 4200);
 }
 function showPage(page) {
+  const invitePanel = document.querySelector("#squad-invite-panel");
+  const inWorkspace = page === "workspace";
+  const inviteHost = document.querySelector(inWorkspace ? '[data-page="workspace"]' : '.dashboard-grid');
+  if (inWorkspace) document.querySelector("#workspace-status").after(invitePanel);
+  else inviteHost.append(invitePanel);
+  invitePanel.hidden = inWorkspace;
+  document.querySelector("#invite-squad-id").disabled = inWorkspace;
+  document.querySelector("#invite-result").hidden = true;
+  document.querySelector("#generated-invite-token").value = "";
+  document.querySelector("#workspace-invite").setAttribute("aria-expanded", "false");
   document.querySelectorAll("[data-page]").forEach((section) => { section.hidden = section.dataset.page !== page; });
   document.querySelector(".brand").href = page === "dashboard" || page === "workspace" ? "#/dashboard" : "#/home";
   if (page === "auth") runHero();
@@ -687,7 +697,9 @@ async function createSquad(form) {
 }
 async function createInvite(form) {
   const formData = new FormData(form);
-  const squadId = formData.get("squadId");
+  const inWorkspace = !document.querySelector('[data-page="workspace"]').hidden;
+  const squadId = inWorkspace ? workspace.id : formData.get("squadId");
+  if (inWorkspace && (!isAdmin() || !activeConsent())) return showStatus("squad-invite", "คุณไม่มีสิทธิ์สร้างคำเชิญในก๊วนนี้");
   if (!squadId) return showStatus("squad-invite", "ยังไม่มีก๊วนที่คุณมีสิทธิ์สร้างคำเชิญ");
   try {
     const data = await apiRequest(`/api/v1/squads/${encodeURIComponent(squadId)}/invites`, {
@@ -791,10 +803,26 @@ document.querySelector("#social-refresh")?.addEventListener("click", () => loadS
 }
 
 // ===== squad workspace =====
+document.querySelector("#workspace-invite").addEventListener("click", () => {
+  if (!isAdmin() || !activeConsent()) return;
+  const panel = document.querySelector("#squad-invite-panel");
+  document.querySelector("#invite-squad-id").value = String(workspace.id);
+  panel.hidden = !panel.hidden;
+  document.querySelector("#workspace-invite").setAttribute("aria-expanded", String(!panel.hidden));
+  if (!panel.hidden) {
+    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    document.querySelector("#invite-max-uses").focus({ preventScroll: true });
+  }
+});
 async function loadWorkspace() {
   const id = workspace.id;
   if (!id) return;
   const epoch = ++workspace.epoch;
+  document.querySelector("#workspace-invite").hidden = true;
+  document.querySelector("#workspace-invite").setAttribute("aria-expanded", "false");
+  document.querySelector("#squad-invite-panel").hidden = true;
+  document.querySelector("#invite-result").hidden = true;
+  document.querySelector("#generated-invite-token").value = "";
   workspace.member = null;
   workspace.members = [];
   workspace.tasks = [];
@@ -829,6 +857,7 @@ async function loadWorkspace() {
       return;
     }
     document.querySelector("#workspace-content").hidden = false;
+    document.querySelector("#workspace-invite").hidden = !isAdmin();
     document.querySelector("#settings-form").hidden = !isAdmin();
     document.querySelector("#squad-management").hidden = !isAdmin();
     document.querySelector("#join-approval").checked = Boolean(data.squad.require_join_approval);
