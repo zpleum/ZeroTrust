@@ -605,6 +605,21 @@ app.get("/api/v1/squads", requireAuth, async (req, res, next) => {
   try { res.json({ squads: await squadRepo.listForUser(req.auth.userId) }); }
   catch (error) { return next(error); }
 });
+app.get("/api/v1/wall-alerts", requireAuth, async (req, res, next) => {
+  try {
+    const [posts] = await pool.execute(
+      "SELECT w.id,w.squad_id,w.category,w.content,w.created_at,s.name AS squad_name,u.display_name AS target_name " +
+      "FROM wall_posts w JOIN squads s ON s.id=w.squad_id " +
+      "JOIN squad_members m ON m.squad_id=w.squad_id AND m.user_id=? " +
+      "JOIN users u ON u.id=w.target_user_id " +
+      "JOIN squad_members target ON target.squad_id=w.squad_id AND target.user_id=w.target_user_id " +
+      "WHERE m.status='active' AND m.rules_accepted_at IS NOT NULL AND s.wall_mode='snitch' " +
+      "AND target.status='active' AND target.snitch_opt_out=FALSE AND w.kind='snitch' AND w.status='open' " +
+      "ORDER BY w.created_at DESC,w.id DESC LIMIT 20", [req.auth.userId]);
+    res.set("Cache-Control", "no-store");
+    res.json({ posts });
+  } catch (error) { return next(error); }
+});
 app.get("/api/v1/squads/public", requireAuth, async (req, res, next) => {
   try {
     const search = typeof req.query?.q === "string" ? req.query.q.trim().slice(0,60) : "";

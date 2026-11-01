@@ -44,7 +44,14 @@
     </div>
   </header>
 
+  <aside id="wall-alert-bar" class="wall-alert-bar" hidden aria-label="แจ้งเตือนรายงานในก๊วน" aria-live="polite">
+    <div class="wall-alert-inner"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i><p id="wall-alert-summary"></p><a id="wall-alert-link" class="wall-alert-link" href="#/dashboard">ดูรายงาน <span aria-hidden="true">→</span></a></div>
+  </aside>
   <main id="app">
+    <section id="wall-spotlight" class="wall-spotlight" hidden aria-labelledby="wall-spotlight-title">
+      <div class="wall-spotlight-heading"><div><h2 id="wall-spotlight-title">กระดานแฉ · เรื่องนี้ต้องเคลียร์</h2><p class="wall-disclaimer">รายงานจากสมาชิกในก๊วน ยังไม่ใช่ข้อสรุปว่าผู้ถูกรายงานทำผิด โปรดตรวจสอบข้อเท็จจริงและรับฟังทุกฝ่าย</p></div><span id="wall-spotlight-count" class="wall-count"></span></div>
+      <div id="wall-spotlight-list" class="wall-spotlight-list"></div>
+    </section>
     <!-- ============ HOME ============ -->
     <section class="home-page" data-page="home" aria-labelledby="home-title">
       <div class="home-copy">
@@ -352,7 +359,7 @@
           </div>
           <div class="social-actions"><button type="button" class="secondary-button" id="social-refresh"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i><span>โหลดรายการ</span></button><button type="button" class="primary-button compact-button" id="social-create"><i class="fa-solid fa-plus" aria-hidden="true"></i><span>สร้างรายการ</span></button></div>
           <div id="social-status" class="form-status" role="status"></div>
-          <form id="social-form" hidden aria-labelledby="social-form-title">
+          <form id="social-form" hidden novalidate aria-labelledby="social-form-title">
             <h3 id="social-form-title" tabindex="-1">สร้างรายการ</h3>
             <p id="social-form-hint" class="muted"></p>
             <div id="social-fields" class="editor-grid"></div>

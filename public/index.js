@@ -267,7 +267,45 @@ function toast(message, tone = "success") {
   requestAnimationFrame(() => item.classList.add("visible"));
   if (tone !== "error") setTimeout(() => { item.classList.remove("visible"); setTimeout(() => item.remove(), 180); }, 4200);
 }
+let wallAlertVersion = 0;
+function clearWallAlerts() {
+  document.querySelector("#wall-alert-bar").hidden = true;
+  document.querySelector("#wall-spotlight").hidden = true;
+  document.querySelector("#wall-spotlight-list").replaceChildren();
+  document.querySelector("#wall-alert-summary").textContent = "";
+  document.querySelector("#wall-alert-link").href = "#/dashboard";
+}
+async function refreshWallAlerts() {
+  const version = ++wallAlertVersion;
+  clearWallAlerts();
+  try {
+    const { posts = [] } = await apiRequest("/api/v1/wall-alerts");
+    if (version !== wallAlertVersion || !posts.length) return;
+    const first = posts[0];
+    const headline = `${first.target_name} · ${first.category}`;
+    document.querySelector("#wall-alert-summary").textContent = `มีรายงานแฉที่รอตรวจสอบ${posts.length === 20 ? "อย่างน้อย " : " "}${posts.length} รายการ — ${headline}`;
+    document.querySelector("#wall-alert-link").href = `#/squad/${first.squad_id}`;
+    document.querySelector("#wall-alert-bar").hidden = false;
+    document.querySelector("#wall-spotlight-count").textContent = `${posts.length === 20 ? "ล่าสุด " : ""}${posts.length} รายงานรอตรวจสอบ`;
+    const list = document.querySelector("#wall-spotlight-list");
+    for (const post of posts) {
+      const item = node("article", null, "wall-report");
+      item.append(node("p", `${post.squad_name} · ${formatDate(post.created_at)}`, "wall-report-meta"));
+      item.append(node("h3", `${post.target_name} · ${post.category}`));
+      item.append(node("p", post.content, "wall-report-content"));
+      const link = node("a", "ดูในก๊วน", "wall-report-link");
+      link.href = `#/squad/${post.squad_id}`;
+      item.append(link);
+      list.append(item);
+    }
+    const homeVisible = ["home", "dashboard"].some((page) => !document.querySelector(`[data-page="${page}"]`).hidden);
+    document.querySelector("#wall-spotlight").hidden = !homeVisible;
+  } catch { if (version === wallAlertVersion) clearWallAlerts(); }
+}
 function showPage(page) {
+  const spotlight = document.querySelector("#wall-spotlight");
+  spotlight.hidden = true;
+  if (["home", "dashboard"].includes(page)) document.querySelector(`[data-page="${page}"]`).prepend(spotlight);
   const invitePanel = document.querySelector("#squad-invite-panel");
   const inWorkspace = page === "workspace";
   const inviteHost = document.querySelector(inWorkspace ? '[data-page="workspace"]' : '.dashboard-grid');
@@ -418,7 +456,7 @@ function openSocialForm() {
     return;
   }
   if (type === "wall") {
-    addField("kind", "ประเภทข้อความ", [["kudos", "ชื่นชม"], ["snitch", "แจ้งปัญหา"]]);
+    addField("kind", "ประเภทข้อความ", [["kudos", "ชื่นชม"], ["snitch", "แฉ"]]);
     addField("target_user_id", "สมาชิกที่เกี่ยวข้อง", members.map(member => [member.user_id, member.display_name || member.username]));
     addField("category", "หมวดหมู่").maxLength = 30;
     addField("content", "รายละเอียด").maxLength = 500;
@@ -448,9 +486,29 @@ function openSocialForm() {
   document.querySelector("#social-form-title").focus();
 }
 async function submitSocialForm(form) {
-  if (!activeConsent() || !form.reportValidity()) return;
+  const submit = form.querySelector("button[type='submit']");
+  if (submit.disabled) return;
+  message("social-form-status", "");
+  if (!activeConsent()) {
+    message("social-form-status", "สิทธิ์สมาชิกยังไม่พร้อม กรุณารีเฟรชข้อมูลก๊วนและยอมรับกฎก่อนบันทึก", true);
+    return;
+  }
+  for (const control of form.querySelectorAll("input, select, textarea")) {
+    control.removeAttribute("aria-invalid");
+    if (!control.checkValidity() || (control.required && !control.value.trim())) {
+      const label = document.querySelector(`label[for='${control.id}']`)?.textContent || "ข้อมูล";
+      message("social-form-status", `กรุณากรอกหรือเลือก ${label} ให้ครบและถูกต้อง`, true);
+      control.setAttribute("aria-invalid", "true");
+      const focusTarget = control.matches("select") ? control.parentElement.querySelector(".custom-select-trigger") || control : control;
+      focusTarget.focus();
+      return;
+    }
+  }
   const type = form.dataset.type;
-  if (!socialPath(type)) return;
+  if (!socialPath(type)) {
+    message("social-form-status", "ไม่พบประเภทกิจกรรม กรุณาปิดฟอร์มแล้วกดสร้างรายการอีกครั้ง", true);
+    return;
+  }
   const body = Object.fromEntries(new FormData(form));
   for (const key of Object.keys(body)) body[key] = String(body[key]).trim();
   if (Object.values(body).some(value => !value)) { message("social-form-status", "กรุณากรอกข้อมูลให้ครบ ไม่ใช้เพียงช่องว่าง", true); return; }
@@ -479,7 +537,9 @@ async function submitSocialForm(form) {
   await mutate(form.querySelector("button[type='submit']"), "social-form-status", `${squadPath()}/${socialPath(type)}`, "POST", body, async () => {
     closeSocialForm();
     message("social-status", "บันทึกรายการสำเร็จ");
+    toast("บันทึกรายการสำเร็จ", "success");
     await loadSocial(type);
+    document.querySelector("#social-status").scrollIntoView({ block: "nearest" });
     document.querySelector("#social-create").focus();
   });
 }
@@ -493,6 +553,7 @@ async function loadSocial(type = "wall") {
     const data = await apiRequest(`${squadPath()}/${path}`);
     if (epoch !== workspace.epoch || type !== document.querySelector('[data-social-tab][aria-selected="true"]')?.dataset.socialTab) return;
     const rows = data[type === "wall" ? "posts" : path] || [];
+    if (type === "wall") void refreshWallAlerts();
     list.replaceChildren();
     if (!rows.length) list.append(emptyState("comments", "ยังไม่มีรายการ", "กดสร้างรายการเพื่อเริ่มกิจกรรมใหม่"));
     const labels = { wall: "กระดานก๊วน", dare: "ท้าทายประจำสัปดาห์", vouch: "ค้ำประกันเพื่อน", alibi: "ขอแก้ตัวและเลื่อนกำหนด" };
@@ -577,6 +638,7 @@ async function loadNotifications() {
   } catch (error) { toast(error.message, "error"); }
 }
 async function routeApp() {
+  void refreshWallAlerts();
   const version = ++routeVersion;
   ++workspace.epoch;
   const hash = location.hash;
@@ -784,7 +846,21 @@ initButtonSounds();
 document.querySelector("#social-create")?.setAttribute("aria-controls", "social-form");
 document.querySelector("#social-create")?.setAttribute("aria-expanded", "false");
 document.querySelector("#social-create")?.addEventListener("click", openSocialForm);
-document.querySelector("#social-form")?.addEventListener("submit", event => { event.preventDefault(); void submitSocialForm(event.currentTarget); });
+document.querySelector("#social-form")?.addEventListener("submit", async event => {
+  event.preventDefault();
+  const epoch = workspace.epoch;
+  try { await submitSocialForm(event.currentTarget); }
+  catch {
+    if (epoch !== workspace.epoch) return;
+    message("social-form-status", "บันทึกไม่สำเร็จ กรุณารีเฟรชรายการเพื่อดูว่าบันทึกแล้วหรือไม่ก่อนลองอีกครั้ง", true);
+  }
+  if (epoch !== workspace.epoch) return;
+  const status = document.querySelector("#social-form-status");
+  if (status.dataset.error === "true") {
+    status.scrollIntoView({ block: "nearest" });
+    toast(status.textContent, "error");
+  }
+});
 document.querySelector("#social-cancel")?.addEventListener("click", () => {
   if (document.querySelector("#social-form button[type='submit']").disabled) return;
   closeSocialForm();

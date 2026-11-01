@@ -234,6 +234,29 @@ i[class*="fa-"] { flex: none; }
 }
 [data-page]:not([hidden]) { animation: rise 0.5s var(--ease) both; }
 
+.wall-alert-bar { background: var(--err-soft); color: var(--err); border-bottom: 1px solid currentColor; }
+.wall-alert-inner { width: min(calc(100% - 2rem), var(--container)); margin: auto; display: flex; align-items: center; gap: 0.8rem; padding-block: 0.85rem; }
+.wall-alert-inner p { flex: 1; margin: 0; min-width: 0; overflow-wrap: anywhere; font-weight: 600; }
+.wall-alert-link { flex-shrink: 0; color: inherit; font-weight: 700; text-underline-offset: 0.25em; padding-block: 0.5rem; }
+.wall-spotlight { grid-column: 1 / -1; padding: clamp(1.25rem, 4vw, 3rem); margin-bottom: 2.5rem; border: 1px solid var(--err); border-radius: var(--r-lg); background: var(--surface); }
+.wall-spotlight-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem; padding-bottom: 1.5rem; }
+.wall-spotlight h2 { font-size: clamp(1.8rem, 4vw, 3.2rem); line-height: 1.25; color: var(--err); margin: 0 0 0.75rem; text-wrap: balance; }
+.wall-disclaimer { max-width: 65ch; color: var(--fg-2); margin: 0; }
+.wall-count { color: var(--err); font-weight: 700; flex-shrink: 0; padding-top: 0.35rem; }
+.wall-spotlight-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; max-height: 38rem; overflow-y: auto; scrollbar-color: var(--line-strong) var(--surface); }
+.wall-report { min-width: 0; padding: 1.5rem 0; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+.wall-report-meta { color: var(--fg-2); font-size: 0.85rem; margin: 0 0 0.5rem; }
+.wall-report h3 { font-size: 1.3rem; margin: 0 0 0.6rem; }
+.wall-report-content { white-space: pre-wrap; margin: 0 0 0.8rem; color: var(--fg); }
+.wall-report-link { color: var(--accent-text); font-weight: 600; text-underline-offset: 0.25em; display: inline-block; padding-block: 0.5rem; }
+@media (max-width: 640px) {
+  .wall-alert-inner { flex-wrap: wrap; gap: 0.4rem 0.65rem; }
+  .wall-alert-inner p { flex-basis: calc(100% - 2rem); }
+  .wall-alert-link { margin-left: auto; }
+  .wall-spotlight-heading { flex-direction: column; gap: 0.75rem; }
+  .wall-spotlight-list { grid-template-columns: 1fr; max-height: 36rem; }
+}
+
 .dashboard-heading {
   display: flex;
   align-items: flex-start;
