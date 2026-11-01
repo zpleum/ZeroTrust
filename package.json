@@ -10,10 +10,21 @@
   },
   "scripts": {
     "start": "node server.js",
-    "check": "node --check server.js && node --check public/index.js"
+    "check": "node --check server.js && node --check public/index.js",
+    "test": "node server.js --selftest",
+    "check:db": "node server.js --check-db",
+    "check:locks": "node server.js --check-job-lock"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
-    "mysql2": "^3.14.0"
+    "express-rate-limit": "^8.7.2",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.5.0",
+    "mysql2": "^3.14.0",
+    "pino": "^10.0.0",
+    "sanitize-html": "^2.18.1"
   }
 }

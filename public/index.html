@@ -3,17 +3,579 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Zero Trust project">
+  <meta name="description" content="Zero Trust — พื้นที่ทำงานร่วมกันที่มีความรับผิดชอบ">
+  <meta name="color-scheme" content="light dark">
   <title>Zero Trust</title>
+  <script>
+    /* ตั้งธีมก่อนวาดหน้า กันจอกะพริบ */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("zeroTrustTheme"); } catch (e) {}
+      if (t !== "dark" && t !== "light") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="/style.css">
-  <script type="module" src="/index.js"></script>
+  <script type="module" src="/index.js?v=20261102"></script>
 </head>
 <body>
+  <header class="app-header">
+    <div class="app-header-inner">
+      <a class="brand" href="#/home" aria-label="Zero Trust หน้าหลัก">
+        <span class="brand-mark"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span>
+        <span>Zero Trust</span>
+      </a>
+      <div class="header-tools">
+        <div class="clock-pill">
+          <i class="fa-regular fa-clock" aria-hidden="true"></i>
+          <time class="server-clock" data-server-clock aria-live="off">กำลังซิงก์เวลา…</time>
+        </div>
+        <button type="button" class="icon-btn" id="notification-button" aria-label="การแจ้งเตือน"><i class="fa-solid fa-bell" aria-hidden="true"></i><span id="notification-count" hidden></span></button>
+        <button type="button" class="icon-btn" id="sfx-toggle" aria-pressed="false" aria-label="เปิดเสียงระบบ"><i class="fa-solid fa-volume-xmark" aria-hidden="true"></i></button>
+        <button type="button" class="icon-btn theme-toggle" id="theme-toggle" aria-pressed="false" aria-label="สลับเป็นโหมดมืด">
+          <i class="fa-solid fa-sun" aria-hidden="true"></i>
+          <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
   <main id="app">
-    <section data-page="home" aria-labelledby="page-title">
-      <h1 id="page-title">Zero Trust</h1>
-      <p>Project scaffold initialized.</p>
+    <!-- ============ HOME ============ -->
+    <section class="home-page" data-page="home" aria-labelledby="home-title">
+      <div class="home-copy">
+        <span class="home-kicker"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Zero Trust</span>
+        <h1 id="home-title">พิสูจน์ความไว้ใจ จากงานที่ทำจริง</h1>
+        <p>จัดงานในก๊วน ติดตามความรับผิดชอบ และสร้างความน่าเชื่อถือร่วมกันในพื้นที่เดียว</p>
+        <div class="home-actions">
+          <a class="primary-button" href="#/register"><span>เริ่มต้นใช้งาน</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a class="secondary-button" href="#/login"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i><span>เข้าสู่ระบบ</span></a>
+        </div>
+      </div>
+      <div class="home-proof" aria-label="ภาพรวมระบบ Zero Trust">
+        <div class="home-proof-head"><span>Team health</span><strong>86%</strong></div>
+        <div class="home-progress"><span></span></div>
+        <div class="home-proof-grid">
+          <div><i class="fa-solid fa-list-check" aria-hidden="true"></i><strong>งาน</strong><span>ติดตามทุกกำหนดส่ง</span></div>
+          <div><i class="fa-solid fa-users" aria-hidden="true"></i><strong>ก๊วน</strong><span>ทำงานร่วมกันเป็นทีม</span></div>
+          <div><i class="fa-solid fa-shield-heart" aria-hidden="true"></i><strong>Trust</strong><span>สะท้อนความรับผิดชอบ</span></div>
+        </div>
+      </div>
+      <div class="home-about" id="about" aria-labelledby="about-title">
+        <div class="home-about-heading">
+          <p class="home-about-label">Zero Trust โดย zPleum</p>
+          <h2 id="about-title">เกี่ยวกับ Zero Trust</h2>
+          <p>พื้นที่ทำงานร่วมกันสำหรับกลุ่มเรียนและทีมงาน เพื่อจัดงาน ติดตามความรับผิดชอบ และสร้างข้อมูลที่ช่วยให้ทีมเห็นภาพการทำงานร่วมกันได้ชัดขึ้น</p>
+        </div>
+        <div class="home-feature-grid">
+          <article><i class="fa-solid fa-users" aria-hidden="true"></i><h3>จัดก๊วน</h3><p>สร้างก๊วนแบบ Public หรือ Private เชิญสมาชิก กำหนดบทบาท และยืนยันกติกาก่อนเข้าร่วม</p></article>
+          <article><i class="fa-solid fa-list-check" aria-hidden="true"></i><h3>ติดตามงาน</h3><p>สร้างงาน กำหนดผู้รับผิดชอบ กำหนดส่ง ความสำคัญ และดูความคืบหน้าในมุมมองรายการหรือคัมบัง</p></article>
+          <article><i class="fa-solid fa-heart-pulse" aria-hidden="true"></i><h3>ดูสุขภาพทีม</h3><p>ดูภาพรวมความพร้อมของทีมและรายการเหตุการณ์ที่ส่งผลต่อการทำงานร่วมกันในก๊วน</p></article>
+          <article><i class="fa-solid fa-calendar-check" aria-hidden="true"></i><h3>จองห้อง</h3><p>เลือกห้องและช่วงเวลาที่เปิดให้บริการ โดยตรวจจองซ้ำซ้อนกับรายการอื่นก่อนบันทึกการจอง</p></article>
+        </div>
+        <div class="home-about-content">
+          <section class="home-about-details">
+            <h3>หลักการของระบบ</h3>
+            <p>ระบบเน้นหลักฐาน สถานะ และประวัติการทำงาน มากกว่าการให้คำรับรองว่าจะไว้วางใจบุคคลใด คะแนน Trust เป็นข้อมูลประกอบ ไม่ใช้แทนการตัดสินคุณลักษณะ ความสามารถ หรือคุณค่าของคนทุกมิติ</p>
+            <ul><li>เปิดเห็นสถานะและผู้รับผิดชอบในงาน</li><li>ควบคุมการเข้าก๊วนตามบทบาท</li><li>บันทึกเหตุการณ์สำคัญไว้ตรวจสอบ</li><li>ใช้ข้อมูลร่วมกันอย่างระมัดระวังและมีวัตถุประสงค์</li></ul>
+          </section>
+          <section class="home-about-details">
+            <h3>ขอบเขตรุ่นปัจจุบัน</h3>
+            <p>บางฟังก์ชันยังอยู่ระหว่างพัฒนา ไม่ควรตีความหน้าระบบว่าใช้งานครบทุกขั้นตอนโดยอัตโนมัติ</p>
+            <ul><li>หลักฐาน Proof และไฟล์แนบยังอยู่ระหว่างพัฒนาเพิ่มเติม</li><li>กระดานก๊วน ท้าทายประจำสัปดาห์ ค้ำประกันเพื่อน และขอแก้ตัวและเลื่อนกำหนด ยังรองรับการใช้งานได้บางส่วน</li><li>การเรียง PDF ด้วย AI ถูกพักไว้ ไม่ส่งเอกสารไปยังผู้ให้บริการ AI ในรุ่นนี้</li></ul>
+          </section>
+        </div>
+        <div class="home-about-footer">
+          <div><strong>ผู้พัฒนาและผู้ดูแล</strong><p>วีรภัทร มากวงษ์ ภายใต้แบรนด์ zPleum จังหวัดตาก ประเทศไทย</p></div>
+          <a class="secondary-button" href="mailto:wiraphat.makwong@gmail.com"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span>ติดต่อผู้ดูแล</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AUTH ============ -->
+    <section class="auth-layout" data-page="auth" aria-labelledby="auth-title">
+      <div class="auth-aside">
+        <div class="hero-ring" aria-hidden="true">
+          <svg viewBox="0 0 240 240" fill="none">
+            <g class="orbit">
+              <circle cx="120" cy="120" r="108" class="orbit-line"/>
+              <circle cx="228" cy="120" r="5" class="orbit-dot"/>
+              <circle cx="66" cy="213.5" r="5" class="orbit-dot"/>
+              <circle cx="66" cy="26.5" r="5" class="orbit-dot pulse"/>
+            </g>
+            <circle cx="120" cy="120" r="76" class="ring-track"/>
+            <circle cx="120" cy="120" r="76" class="ring-value" transform="rotate(-90 120 120)"/>
+          </svg>
+          <div class="hero-ring-label">
+            <span class="hero-number" data-count-to="86">86</span>
+            <span class="hero-caption">Trust</span>
+          </div>
+        </div>
+        <div class="aside-copy">
+          <p class="aside-title">ไว้ใจกันได้ เพราะพิสูจน์กันได้</p>
+          <ul class="aside-list">
+            <li><i class="fa-solid fa-gauge-high" aria-hidden="true"></i><span>คะแนนความน่าเชื่อถือที่เห็นได้ชัด</span></li>
+            <li><i class="fa-solid fa-handshake" aria-hidden="true"></i><span>ค้ำประกันเพื่อนด้วยคะแนนของคุณ</span></li>
+            <li><i class="fa-solid fa-heart-pulse" aria-hidden="true"></i><span>ส่งงานตรงเวลา ทีมแข็งแรงขึ้น</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="auth-panel">
+        <h1 id="auth-title">เข้าร่วม Zero Trust</h1>
+        <div class="auth-tabs" role="tablist" aria-label="บัญชีผู้ใช้">
+          <button type="button" role="tab" id="login-tab" aria-controls="login-panel" aria-selected="true" data-auth-tab="login"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i><span>เข้าสู่ระบบ</span></button>
+          <button type="button" role="tab" id="register-tab" aria-controls="register-panel" aria-selected="false" data-auth-tab="register"><i class="fa-solid fa-user-plus" aria-hidden="true"></i><span>สมัครสมาชิก</span></button>
+        </div>
+
+        <div id="login-panel" role="tabpanel" aria-labelledby="login-tab">
+          <form id="login-form" novalidate>
+            <div class="field">
+              <label for="login-name">ชื่อผู้ใช้หรืออีเมล</label>
+              <div class="input-wrap"><input id="login-name" name="login" autocomplete="username" placeholder="ชื่อผู้ใช้หรืออีเมล" required></div>
+            </div>
+            <div class="field">
+              <label for="login-password">รหัสผ่าน</label>
+              <div class="input-wrap">
+                <input id="login-password" name="password" type="password" autocomplete="current-password" minlength="8" placeholder="รหัสผ่าน" required>
+                <button type="button" class="icon-btn ghost" data-toggle-password aria-pressed="false" aria-label="แสดงรหัสผ่าน"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <p class="form-status" data-form-status="login" role="alert"></p>
+            <button class="primary-button" type="submit"><span>เข้าสู่ระบบ</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </form>
+        </div>
+
+        <div id="register-panel" role="tabpanel" aria-labelledby="register-tab" hidden>
+          <form id="register-form" novalidate>
+            <div class="field-row">
+              <div class="field">
+                <label for="register-name">ชื่อผู้ใช้</label>
+                <div class="input-wrap"><input id="register-name" name="username" autocomplete="username" minlength="3" maxlength="30" pattern="[A-Za-z0-9_]+" placeholder="เช่น student_01" required></div>
+              </div>
+              <div class="field">
+                <label for="register-year">ปีเกิด พ.ศ.</label>
+                <input id="register-year" name="birth_year" type="number" inputmode="numeric" min="1900" max="2600" required>
+              </div>
+            </div>
+            <div class="field">
+              <label for="register-email">อีเมล</label>
+              <div class="input-wrap"><input id="register-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required></div>
+            </div>
+            <div class="field">
+              <label for="register-display">ชื่อที่แสดง</label>
+              <div class="input-wrap"><input id="register-display" name="display_name" autocomplete="name" placeholder="ชื่อที่เพื่อนเห็น" required></div>
+            </div>
+            <div class="field">
+              <label for="register-password">รหัสผ่าน</label>
+              <div class="input-wrap">
+                <input id="register-password" name="password" type="password" autocomplete="new-password" minlength="8" placeholder="อย่างน้อย 8 ตัว อักษรและตัวเลข" required>
+                <button type="button" class="icon-btn ghost" data-toggle-password aria-pressed="false" aria-label="แสดงรหัสผ่าน"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
+              </div>
+              <small>อย่างน้อย 8 ตัว อักษรและตัวเลขอย่างน้อยหนึ่งตัว</small>
+            </div>
+            <p class="form-status" data-form-status="register" role="alert"></p>
+            <button class="primary-button" type="submit"><span>สร้างบัญชี</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DASHBOARD ============ -->
+    <section class="page" data-page="dashboard" hidden aria-labelledby="dashboard-title">
+      <div class="dashboard-heading">
+        <div>
+          <h1 id="dashboard-title">ก๊วนของฉัน</h1>
+          <p class="muted">เลือกก๊วนเพื่อดูงาน สมาชิก และสุขภาพทีม</p>
+        </div>
+        <button class="secondary-button" id="logout-button" type="button"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i><span>ออกจากระบบ</span></button>
+      </div>
+
+      <section class="squad-section" aria-labelledby="squad-list-title">
+        <h2 id="squad-list-title" class="section-title"><i class="fa-solid fa-users" aria-hidden="true"></i><span>ก๊วนที่กำลังอยู่</span></h2>
+        <div id="squad-list" class="squad-list" aria-live="polite"></div>
+      </section>
+
+      <section class="workspace-panel public-squad-section" aria-labelledby="public-squad-title">
+        <h2 id="public-squad-title"><span class="tile"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></span><span>ค้นหาก๊วน Public</span></h2>
+        <div class="public-squad-search"><input id="public-squad-search" type="search" placeholder="ชื่อก๊วน"><button id="public-squad-search-button" class="secondary-button" type="button"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>ค้นหา</span></button></div>
+        <p id="public-squad-status" class="form-status" role="status"></p>
+        <div id="public-squad-list" class="squad-list" aria-live="polite"></div>
+      </section>
+      <div class="dashboard-grid">
+        <section class="workspace-panel" aria-labelledby="create-squad-title">
+          <h2 id="create-squad-title"><span class="tile"><i class="fa-solid fa-plus" aria-hidden="true"></i></span><span>สร้างก๊วนใหม่</span></h2>
+          <form id="squad-create-form" novalidate>
+            <div class="field"><label for="squad-name">ชื่อก๊วน</label><input id="squad-name" name="name" maxlength="60" required></div>
+            <div class="field"><label for="squad-description">รายละเอียด</label><textarea id="squad-description" name="description" maxlength="255"></textarea></div>
+            <div class="field"><label for="squad-visibility">ประเภทก๊วน</label><select id="squad-visibility" name="visibility"><option value="public" selected>Public - สมาชิกใหม่ต้องรออนุมัติ</option><option value="private">Private - สมาชิกเข้าร่วมได้ทันที</option></select></div>
+            <p class="form-status" data-form-status="squad-create" role="alert"></p>
+            <button class="primary-button" type="submit"><i class="fa-solid fa-plus" aria-hidden="true"></i><span>สร้างก๊วน</span></button>
+          </form>
+        </section>
+
+        <section class="workspace-panel" aria-labelledby="join-squad-title">
+          <h2 id="join-squad-title"><span class="tile"><i class="fa-solid fa-ticket" aria-hidden="true"></i></span><span>เข้าร่วมด้วยลิงก์เชิญ</span></h2>
+          <form id="squad-join-form" novalidate>
+            <div class="field"><label for="invite-token">Invite token</label><input id="invite-token" name="token" maxlength="32" autocomplete="off" required></div>
+            <p class="form-status" data-form-status="squad-join" role="alert"></p>
+            <button class="primary-button" type="submit"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i><span>ส่งคำขอเข้าร่วม</span></button>
+          </form>
+        </section>
+
+        <section class="workspace-panel" aria-labelledby="invite-squad-title">
+          <h2 id="invite-squad-title"><span class="tile"><i class="fa-solid fa-link" aria-hidden="true"></i></span><span>สร้างคำเชิญ</span></h2>
+          <form id="squad-invite-form" novalidate>
+            <div class="field"><label for="invite-squad-id">ก๊วน</label><select id="invite-squad-id" name="squadId" required></select></div>
+            <div class="field-row"><div class="field"><label for="invite-max-uses">จำนวนครั้งใช้</label><input id="invite-max-uses" name="maxUses" type="number" min="1" max="1000" value="1"></div></div>
+            <p class="form-status" data-form-status="squad-invite" role="alert"></p>
+            <button class="primary-button" type="submit"><i class="fa-solid fa-key" aria-hidden="true"></i><span>สร้าง Invite Token</span></button>
+          </form>
+          <div class="invite-result" id="invite-result" hidden>
+            <label for="generated-invite-token">ลิงก์เชิญ</label>
+            <input id="generated-invite-token" readonly>
+            <button class="secondary-button" id="copy-invite-button" type="button"><i class="fa-regular fa-copy" aria-hidden="true"></i><span>คัดลอก</span></button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ============ INVITE ROUTE ============ -->
+    <section class="page invite-page" data-page="invite" hidden aria-labelledby="invite-route-title">
+      <div class="invite-card">
+        <span class="tile large"><i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i></span>
+        <h1 id="invite-route-title">เข้าร่วมก๊วน</h1>
+        <p id="invite-route-status" role="status"></p>
+        <div class="action-row">
+          <button id="retry-invite" class="secondary-button" type="button"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i><span>ลองคำเชิญอีกครั้ง</span></button>
+          <a class="back-link" href="#/dashboard"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>กลับไปก๊วนของฉัน</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WORKSPACE ============ -->
+    <section class="page squad-workspace" data-page="workspace" hidden aria-labelledby="workspace-title">
+      <nav class="workspace-nav" aria-label="พื้นที่ก๊วน">
+        <a class="back-link" href="#/dashboard"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>ก๊วนของฉัน</a>
+        <div class="switcher"><label for="squad-switcher">เปลี่ยนก๊วน</label><select id="squad-switcher"></select></div>
+        <button type="button" class="secondary-button" data-logout><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i><span>ออกจากระบบ</span></button>
+      </nav>
+
+      <div class="dashboard-heading">
+        <h1 id="workspace-title">พื้นที่ก๊วน</h1>
+        <button type="button" class="secondary-button" id="refresh-workspace"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i><span>รีเฟรชข้อมูล</span></button>
+      </div>
+      <p id="workspace-status" class="form-status" role="status" tabindex="-1"></p>
+
+      <section id="rules-panel" class="workspace-panel rules-panel" hidden aria-labelledby="rules-title">
+        <h2 id="rules-title"><span class="tile"><i class="fa-solid fa-scroll" aria-hidden="true"></i></span><span>อ่านกติกาก่อนเริ่มทำงานร่วมกัน</span></h2>
+        <p>ก๊วนนี้ใช้ความรับผิดชอบร่วมกันเป็นหลัก โปรดอ่านผลที่อาจเกิดขึ้นกับคุณและเพื่อนก่อนยอมรับ</p>
+        <dl class="rules-list">
+          <div><dt><i class="fa-solid fa-gauge-high" aria-hidden="true"></i>คะแนนความน่าเชื่อถือ (Trust)</dt><dd>คะแนน 0–100 สะท้อนความรับผิดชอบ การส่งงานตรงเวลาและการผิดนัดอาจเพิ่มหรือลดคะแนน คะแนนเดิมยังอยู่เมื่อออกแล้วกลับเข้าก๊วน</dd></div>
+          <div><dt><i class="fa-solid fa-bullhorn" aria-hidden="true"></i>กระดานก๊วน</dt><dd>บอร์ดกิจกรรมอาจแสดงการผิดนัดหรือคำชมตามโหมดที่เจ้าของตั้งไว้ การโหวตตัดสินในโหมดแฉอาจมีผลต่อคะแนน โดยมีกติกาและเพดานกำกับ</dd></div>
+          <div><dt><i class="fa-solid fa-bolt" aria-hidden="true"></i>ท้าทายประจำสัปดาห์</dt><dd>ก๊วนอาจตกลงความท้าทายและเงื่อนไขร่วมกันผ่านการโหวต ผู้ที่เข้าเงื่อนไขต้องทำตามข้อตกลงและส่งหลักฐาน</dd></div>
+          <div><dt><i class="fa-solid fa-handshake" aria-hidden="true"></i>ค้ำประกันเพื่อน</dt><dd>การค้ำประกันคือการใช้คะแนนของคุณรับรองเพื่อน หากเพื่อนผิดเงื่อนไข คุณอาจเสียคะแนนที่วางค้ำไว้ด้วย</dd></div>
+          <div><dt><i class="fa-solid fa-user-clock" aria-hidden="true"></i>ขอแก้ตัวและเลื่อนกำหนด</dt><dd>ขอยื่นเหตุผลพร้อมหลักฐานเพื่อเลื่อนกำหนดได้เฉพาะงานที่อนุญาต อยู่ภายใต้โควตา การโหวต และกำหนดสุดท้าย หากไม่ผ่านอาจคิดโทษย้อนหลัง</dd></div>
+        </dl>
+        <p class="muted">ข้อความนี้อธิบายกติกา ไม่ใช่ส่วนใช้งานกระดานก๊วน ท้าทายประจำสัปดาห์ ค้ำประกันเพื่อน หรือขอแก้ตัวและเลื่อนกำหนด</p>
+        <form id="rules-form">
+          <label class="check-row"><input type="checkbox" id="rules-accepted" required><span>ฉันอ่านและยอมรับกติกาทั้งห้าข้อ</span></label>
+          <button type="submit" class="primary-button compact-button"><i class="fa-solid fa-check" aria-hidden="true"></i><span>ยอมรับกติกา</span></button>
+        </form>
+      </section>
+
+      <section id="membership-gate" class="workspace-panel gate-panel" hidden>
+        <h2><span class="tile"><i class="fa-solid fa-lock" aria-hidden="true"></i></span><span>สถานะการเข้าร่วม</span></h2>
+        <p id="membership-gate-text"></p>
+      </section>
+
+      <div id="workspace-content" hidden>
+        <section id="health-strip" class="health-strip" aria-labelledby="health-title">
+          <div class="health-main">
+            <h2 id="health-title"><i class="fa-solid fa-heart-pulse" aria-hidden="true"></i><span>สุขภาพทีม</span></h2>
+            <p id="health-label" role="status">กำลังโหลด</p>
+            <progress id="health-progress" max="100" aria-label="สุขภาพทีม"></progress>
+          </div>
+          <div class="health-side">
+            <h3>ผู้มีส่วนต่อการเสียเลือดทีม</h3>
+            <ul id="health-contributors"></ul>
+          </div>
+        </section>
+
+        <section class="task-section" aria-labelledby="tasks-title">
+          <div class="section-heading">
+            <div>
+              <h2 id="tasks-title">งานของก๊วน</h2>
+              <p class="muted">จัดการงานและความคืบหน้า กำหนดเวลาแสดงตามเวลาบนอุปกรณ์</p>
+            </div>
+            <button type="button" id="new-task" class="primary-button compact-button"><i class="fa-solid fa-plus" aria-hidden="true"></i><span>สร้างงาน</span></button>
+          </div>
+
+          <fieldset class="view-choice">
+            <legend>มุมมองงาน</legend>
+            <label><input type="radio" name="task-view" value="list" checked><i class="fa-solid fa-list" aria-hidden="true"></i><span>รายการ</span></label>
+            <label><input type="radio" name="task-view" value="kanban"><i class="fa-solid fa-table-columns" aria-hidden="true"></i><span>คัมบัง</span></label>
+          </fieldset>
+
+          <p id="tasks-status" class="form-status" role="status"></p>
+          <div id="task-list" class="task-list"></div>
+
+          <section class="workspace-panel" aria-labelledby="booking-heading">
+          <div class="section-heading"><div><h2 id="booking-heading">จองห้อง</h2><p class="muted">พิมพ์ชื่อห้องและช่วงเวลาที่ไม่ซ้ำกับการจองอื่น ชื่อเดิมใช้ห้องเดิม ห้องใหม่จองได้ 30–240 นาที เป็นช่วงละ 30 นาที</p></div></div>
+          <form id="room-booking-form">
+            <div class="editor-grid">
+              <div class="field"><label for="booking-room">ห้อง</label><input id="booking-room" name="room_name" maxlength="80" placeholder="ชื่อห้อง" required></div>
+              <div class="field"><label for="booking-title">หัวข้อการจอง</label><input id="booking-title" name="title" maxlength="100" placeholder="ประชุมหรือกิจกรรม"></div>
+              <div class="field"><label for="booking-start">เริ่ม</label><input id="booking-start" name="start_at" type="datetime-local" required></div>
+              <div class="field"><label for="booking-end">สิ้นสุด</label><input id="booking-end" name="end_at" type="datetime-local" required></div>
+            </div>
+            <p id="booking-status" class="form-status" role="status"></p>
+            <button class="primary-button compact-button" type="submit"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i><span>จองห้อง</span></button>
+          </form>
+          <div id="booking-list" class="task-list" aria-live="polite"></div>
+        </section>
+
+        <section class="workspace-panel squad-social-panel" aria-labelledby="social-title">
+          <div class="section-heading"><div><h2 id="social-title">กิจกรรมและความรับผิดชอบของก๊วน</h2><p class="muted">ดูข้อความ กิจกรรมท้าทาย การค้ำประกันเพื่อน และคำขอแก้ตัวหรือเลื่อนกำหนด</p></div></div>
+          <div class="social-tabs" role="tablist" aria-label="กิจกรรมของก๊วน">
+            <button type="button" data-social-tab="wall" aria-selected="true">กระดานก๊วน</button>
+            <button type="button" data-social-tab="dare" aria-selected="false">ท้าทายประจำสัปดาห์</button>
+            <button type="button" data-social-tab="vouch" aria-selected="false">ค้ำประกันเพื่อน</button>
+            <button type="button" data-social-tab="alibi" aria-selected="false">ขอแก้ตัวและเลื่อนกำหนด</button>
+          </div>
+          <div class="social-actions"><button type="button" class="secondary-button" id="social-refresh"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i><span>โหลดรายการ</span></button><button type="button" class="primary-button compact-button" id="social-create"><i class="fa-solid fa-plus" aria-hidden="true"></i><span>สร้างรายการ</span></button></div>
+          <div id="social-status" class="form-status" role="status"></div>
+          <div id="social-list" class="social-list" aria-live="polite"></div>
+        </section>
+
+        <section id="task-editor" class="workspace-panel" hidden aria-labelledby="task-editor-title">
+            <h3 id="task-editor-title" tabindex="-1">สร้างงาน</h3>
+            <form id="task-form">
+              <div class="field"><label for="task-title">ชื่องาน</label><input id="task-title" name="title" required></div>
+              <div class="field"><label for="task-description">รายละเอียด</label><textarea id="task-description" name="description"></textarea></div>
+              <div class="editor-grid">
+                <div class="field"><label for="task-subject">วิชา / หมวด</label><input id="task-subject" name="subject"></div>
+                <div class="field"><label for="task-priority">ความสำคัญ</label><select id="task-priority" name="priority"><option value="low">ต่ำ</option><option value="medium" selected>ปานกลาง</option><option value="high">สูง</option><option value="critical">เร่งด่วนที่สุด</option></select></div>
+                <div class="field"><label for="task-due">กำหนดส่ง (เวลาบนอุปกรณ์)</label><input type="datetime-local" id="task-due" name="due_at" required></div>
+                <div class="field"><label for="task-max-due">กำหนดสุดท้าย (ไม่บังคับ)</label><input type="datetime-local" id="task-max-due" name="max_due_at"></div>
+              </div>
+              <fieldset id="task-assignees"><legend>ผู้รับผิดชอบ (เลือกอย่างน้อย 1 คน)</legend><div id="assignee-options" class="assignee-options"></div></fieldset>
+              <div class="field"><label for="task-alibi">สิทธิ์ขอแก้ตัวและเลื่อนกำหนดของงานนี้</label><select id="task-alibi" name="allow_alibi" required aria-describedby="alibi-preservation"><option value="" disabled>เลือกสิทธิ์ขอแก้ตัวและเลื่อนกำหนดก่อนบันทึก</option><option value="false">ไม่อนุญาต</option><option value="true">อนุญาต</option></select></div>
+              <p id="alibi-preservation" class="muted" hidden>ยังไม่ทราบสิทธิ์ขอแก้ตัวและเลื่อนกำหนดเดิมของงานนี้ โปรดเลือกให้ชัดเจนก่อนบันทึก เพื่อไม่เปลี่ยนค่าเดิมโดยไม่ตั้งใจ</p>
+              <p class="muted">แนบไฟล์ในงานจะเชื่อมผ่าน API ชุดไฟล์ หากหัวข้อไฟล์แนบยังไม่ได้เปิดในหน้านี้ ให้ตรวจจากฟังก์ชันส่งและตรวจงานด้านบน</p>
+              <p data-form-status="task" class="form-status" role="alert" tabindex="-1"></p>
+              <div class="action-row">
+                <button type="submit" class="primary-button compact-button"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i><span>บันทึกงาน</span></button>
+                <button type="button" id="close-task-editor" class="secondary-button"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>ปิดฟอร์ม</span></button>
+              </div>
+            </form>
+          </section>
+        </section>
+
+        <section class="members-section" aria-labelledby="members-title">
+          <div class="section-heading">
+            <h2 id="members-title">สมาชิก</h2>
+            <button type="button" id="leave-squad" class="secondary-button danger"><i class="fa-solid fa-door-open" aria-hidden="true"></i><span>ออกจากก๊วน</span></button>
+          </div>
+          <p id="owner-note" class="muted" hidden><i class="fa-solid fa-crown" aria-hidden="true"></i> เจ้าของก๊วนไม่สามารถออกหรือเปลี่ยนบทบาทได้</p>
+          <section id="squad-management" class="workspace-panel" hidden aria-labelledby="squad-management-title">
+            <h3 id="squad-management-title">จัดการก๊วน</h3>
+            <form id="squad-management-form">
+              <div class="field"><label for="manage-squad-name">ชื่อก๊วน</label><input id="manage-squad-name" name="name" maxlength="60" required></div>
+              <div class="field"><label for="manage-squad-description">รายละเอียด</label><textarea id="manage-squad-description" name="description" maxlength="255"></textarea></div>
+              <div class="field"><label for="manage-squad-visibility">ประเภทก๊วน</label><select id="manage-squad-visibility" name="visibility"><option value="public">Public - ต้องรออนุมัติ</option><option value="private">Private - เข้าร่วมทันที</option></select></div>
+              <div class="action-row"><button type="submit" class="primary-button compact-button"><i class="fa-solid fa-save" aria-hidden="true"></i><span>บันทึกก๊วน</span></button><button type="button" id="close-squad" class="secondary-button"><i class="fa-solid fa-circle-stop" aria-hidden="true"></i><span>ปิดก๊วน</span></button><button type="button" id="reopen-squad" class="secondary-button" hidden><i class="fa-solid fa-rotate-right" aria-hidden="true"></i><span>เปิดก๊วนกลับ</span></button><button type="button" id="cancel-squad" class="secondary-button danger"><i class="fa-solid fa-ban" aria-hidden="true"></i><span>ยกเลิกก๊วน</span></button></div>
+            </form>
+          </section>
+          <form id="settings-form" hidden>
+            <label class="check-row"><input type="checkbox" id="join-approval"><span>สมาชิกใหม่ต้องรออนุมัติหลังยอมรับกติกา</span></label>
+            <button type="submit" class="secondary-button"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i><span>บันทึกการตั้งค่า</span></button>
+          </form>
+          <p id="members-status" class="form-status" role="status"></p>
+          <div id="member-list"></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ============ PUBLIC INFORMATION ============ -->
+    <section class="legal-page" data-page="privacy" hidden aria-labelledby="privacy-title">
+      <article class="legal-document">
+        <header class="legal-header">
+          <p class="legal-eyebrow">Zero Trust</p>
+          <h1 id="privacy-title">นโยบายความเป็นส่วนตัว</h1>
+          <p>มีผลใช้บังคับตั้งแต่ 1 พฤศจิกายน 2569</p>
+        </header>
+        <nav class="legal-toc" aria-label="สารบัญนโยบายความเป็นส่วนตัว">
+          <h2>สารบัญ</h2>
+          <a href="#/privacy#privacy-controller">ผู้ควบคุมข้อมูล</a>
+          <a href="#/privacy#privacy-data">ข้อมูลที่ประมวลผล</a>
+          <a href="#/privacy#privacy-purpose">วัตถุประสงค์และฐานกฎหมาย</a>
+          <a href="#/privacy#privacy-share">การเปิดเผยข้อมูล</a>
+          <a href="#/privacy#privacy-retention">ระยะเวลาจัดเก็บ</a>
+          <a href="#/privacy#privacy-rights">สิทธิของเจ้าของข้อมูล</a>
+          <a href="#/privacy#privacy-minors">ผู้เยาว์</a>
+          <a href="#/privacy#privacy-security">ความมั่นคงปลอดภัย</a>
+          <a href="#/privacy#privacy-change">การเปลี่ยนแปลงนโยบาย</a>
+        </nav>
+
+        <section id="privacy-controller">
+          <h2>1. ผู้ควบคุมข้อมูลส่วนบุคคล</h2>
+          <p>Zero Trust เป็นระบบพื้นที่ทำงานร่วมกันเพื่อจัดงาน กิจกรรม และความรับผิดชอบในก๊วน ผู้ควบคุมข้อมูลส่วนบุคคลคือ วีรภัทร มากวงษ์ เจ้าของบริการ zPleum จังหวัดตาก ประเทศไทย</p>
+          <p>หากมีคำถามหรือข้อร้องเรียนเกี่ยวกับข้อมูลส่วนบุคคล ติดต่อ <a href="mailto:wiraphat.makwong@gmail.com">wiraphat.makwong@gmail.com</a> โดยระบุหัวข้อว่า “ข้อมูลส่วนบุคคล Zero Trust” และรายละเอียดที่ติดต่อได้</p>
+        </section>
+
+        <section id="privacy-data">
+          <h2>2. ข้อมูลที่เก็บรวบรวมและประมวลผล</h2>
+          <h3>2.1 ข้อมูลบัญชี</h3>
+          <p>ชื่อผู้ใช้ อีเมล ชื่อที่แสดง ปีเกิด และรหัสผ่านที่ถูกแปลงเป็นค่ารหัสผ่านแบบแฮชด้วย bcrypt ระบบไม่เก็บรหัสผ่านเป็นข้อความธรรมดา</p>
+          <h3>2.2 ข้อมูลการทำงานร่วมกัน</h3>
+          <p>ชื่อและรายละเอียดก๊วน บทบาท สถานะสมาชิก วันที่ยอมรับกติกา งาน ผู้รับผิดชอบ กำหนดส่ง สถานะ หลักฐาน ข้อความประเมิน เหตุการณ์ Trust การค้ำประกัน เหตุผลในการขอแก้ตัวและเลื่อนกำหนด การโหวต การจองห้อง และข้อความหรือกิจกรรมบนกระดานก๊วนและท้าทายประจำสัปดาห์ ตามที่ผู้ใช้หรือผู้ดูแลก๊วนสร้าง</p>
+          <h3>2.3 ไฟล์และหลักฐาน</h3>
+          <p>ไฟล์ที่อัปโหลดอาจมีชื่อไฟล์ ประเภทเนื้อหา ขนาด รหัสกำกับเวลาอัปโหลด ผู้อัปโหลด การตั้งค่าการมองเห็น และเนื้อหาไฟล์ ระบบรับประเภท PDF PNG JPEG และ WebP สูงสุด 1 ไฟล์ขนาด 16 MiB ต่อคำขอ กรุณาไม่อัปโหลดเอกสารที่ไม่ได้รับอนุญาตหรือมีข้อมูลมากเกินความจำเป็น</p>
+          <h3>2.4 ข้อมูลเทคนิค</h3>
+          <p>บริการใช้คุกกี้บันทึกเซสชันสำหรับเข้าสู่ระบบและ localStorage สำหรับธีมหน้าเว็บ และเก็บ token คำเชิญชั่วคราวใน sessionStorage ระหว่างกระบวนการเข้าร่วม เซิร์ฟเวอร์อาจประมวลผลที่อยู่ IP ของผู้เชื่อมต่อเพื่อป้องกันการใช้งานเกินกำหนดและบันทึกเหตุการณ์ระบบ การเก็บและระยะเวลาของ log บนโฮสติ้งจะแตกต่างตามผู้ให้บริการโครงสร้างพื้นฐานที่ใช้งานจริง</p>
+        </section>
+
+        <section id="privacy-purpose">
+          <h2>3. วัตถุประสงค์และฐานกฎหมาย</h2>
+          <ul>
+            <li><strong>เพื่อทำสัญญาและให้บริการ:</strong> ตรวจบัญชี สร้างและบริหารก๊วน มอบสิทธิ์ ทำงาน กำหนดเวลา จองทรัพยากร และแจ้งสถานะต่าง ๆ</li>
+            <li><strong>เพื่อความยินยอม:</strong> เมื่อผู้ใช้ส่งเนื้อหาไฟล์ ข้อความ การประเมิน หรือข้อมูลอื่นที่ใช้ร่วมกับสมาชิกหรือสาธารณะ ผู้ใช้สามารถควบคุมได้ตามฟังก์ชันที่แสดงในระบบ</li>
+            <li><strong>เพื่อประโยชน์โดยชอบด้วยกฎหมายที่สมเหตุสมผล:</strong> ป้องกันการฉ้อฉล รักษาความมั่นคงปลอดภัย บริหารจุดขัดข้องและทบทวนการทำงานภายในขอบเขตที่จำเป็น</li>
+            <li><strong>เพื่อปฏิบัติตามกฎหมาย:</strong> เมื่อมีคำสั่งทางกฎหมายหรือหน้าที่ทางกฎหมายที่เกี่ยวข้อง</li>
+          </ul>
+          <p>ระบบไม่ได้เปิดใช้งานการเรียง PDF ด้วย AI ในรุ่นปัจจุบัน และไม่ใช้ข้อมูลเพื่อโฆษณาเชิงกำหนดเป้าหมายโดยระบบ Zero Trust ที่เปิดให้บริการในขณะนี้</p>
+        </section>
+
+        <section id="privacy-share">
+          <h2>4. การเปิดเผย การรับส่ง และบุคคลที่สาม</h2>
+          <p>ข้อมูลบัญชีและกิจกรรมอาจปรากฏต่อสมาชิกที่มีสิทธิ์ในก๊วน เจ้าของหรือผู้ดูแลก๊วน และผู้มีสิทธิ์ตรวจสอบตามบทบาท ระบบไม่มีฐานข้อมูลแยกตามที่นโยบายนี้อาจวางไว้ก่อน โปรดระมัดระวังการโพสต์ข้อมูลส่วนตัวหรือข้อมูลลับในการระบุสมาชิกก๊วน</p>
+          <p>เว็บไซต์โหลดฟอนต์จาก Google Fonts และไอคอนจาก Font Awesome ผ่าน CDN การเชื่อมต่อกับผู้ให้บริการเหล่านี้อาจส่งที่อยู่ IP ข้อมูลเบราว์เซอร์และข้อมูลคำขอเข้าถึงตามธรรมชาติของการเชื่อมต่ออินเทอร์เน็ต ผู้ให้บริการมีนโยบายและระยะเวลาเก็บข้อมูลของตนเอง โปรดศึกษานโยบายของผู้ให้บริการดังกล่าวเพิ่มเติม</p>
+          <p>การประมวลผลอาจมีผู้ให้บริการโฮสติ้ง ฐานข้อมูล ระบบสำรองหรือช่างบำรุงรักษาเฉพาะเท่าที่จำเป็น และจะเปิดเผยเมื่อกฎหมายบังคับหรือเพื่อปกป้องสิทธิ ความปลอดภัยหรือทรัพย์สินของผู้เกี่ยวข้อง</p>
+        </section>
+
+        <section id="privacy-retention">
+          <h2>5. ระยะเวลาจัดเก็บและการลบข้อมูล</h2>
+          <p>ข้อมูลบัญชีและบันทึกการทำงานถูกเก็บตราบเท่าที่บัญชีหรือข้อมูลนั้นจำเป็นต่อการให้บริการ การตรวจสอบความรับผิดชอบ ความปลอดภัย หรือหน้าที่ทางกฎหมาย บันทึกประวัติบางรายการอาจต้องคงไว้แม้สมาชิกออกจากก๊วนหรือก๊วนถูกปิด เนื่องจากต้องรักษาความสมบูรณ์ของบันทึก</p>
+          <p>ไฟล์อัปโหลดกำหนดวันหมดอายุ 30 วันตามระบบ แต่การลบเนื้อหาจากฐานข้อมูลยังต้องพึ่งงานล้างข้อมูลที่เรียกใช้เป็นรายครั้งและยังไม่มีตารางล้างอัตโนมัติในสภาพปัจจุบัน หากต้องลบไฟล์หรือข้อมูลก่อนกำหนดให้ติดต่อช่องทางด้านล่าง</p>
+          <p>ระบบยังไม่มีฟังก์ชันลบบัญชี ส่งออกข้อมูลหรือทำให้ข้อมูลนิรนามด้วยตนเองเต็มรูปแบบ การร้องขอจะดำเนินการในวงจำกัดของสิทธิ์กฎหมายและภายใต้หน้าที่บันทึกที่จำเป็น ระบบจะแจ้งข้อจำกัดและผลกระทบต่อข้อมูลหรือกิจกรรมที่เกี่ยวข้องก่อนดำเนินการ</p>
+        </section>
+
+        <section id="privacy-rights">
+          <h2>6. สิทธิของเจ้าของข้อมูลส่วนบุคคล</h2>
+          <p>ภายใต้พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 คุณอาจมีสิทธิขอเข้าถึงหรือรับสำเนา ขอแก้ไขหรืออัปเดตข้อมูล ขอถอนความยินยอมที่ประมวลโดยความยินยอมได้ ขอลบหรือทำลายข้อมูล คัดค้านการประมวลผล ขอระงับการประมวลผล และขอรับหรือโอนไปยังผู้ควบคุมข้อมูลอื่นตามเงื่อนไขกฎหมาย</p>
+          <p>ส่งคำขอพร้อมชื่อบัญชี อีเมลและสิ่งที่ต้องการดำเนินการไปที่ <a href="mailto:wiraphat.makwong@gmail.com">wiraphat.makwong@gmail.com</a> ผู้ควบคุมอาจขอข้อมูลเพื่อยืนยันตัวตนและแจ้งคำขาดำเนินการภายใน 30 วันตามกฎหมาย เว้นแต่กรณีซับซ้อนอาจขยายได้ตามที่กฎหมายอนุญาต หากคำขอถูกปฏิเสธ ระบบจะอธิบายเหตุผลและสิทธิเสนอเรื่องต่อสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลหรือศาลที่เกี่ยวข้อง</p>
+        </section>
+
+        <section id="privacy-minors">
+          <h2>7. ผู้เยาว์และข้อมูลอ่อนไหว</h2>
+          <p>บริการนี้ใช้กับกิจกรรมในชั้นเรียนและงานประกวดที่อาจมีผู้เยาว์ ระบบรับสมัครผู้ใช้โดยตรวจปีเกิดขั้นต่ำเท่ากับอายุ 13 ปี แต่ตรวจจากปีเกิดเท่านั้น จึงไม่ใช่การยืนยันอายุอย่างแม่นยำหรือการยืนยันตัวตนผู้เยาว์</p>
+          <p>ผู้เยาว์ที่ยังไม่บรรลุนิติภาวะตามกฎหมายควรใช้งานภายใต้การดูแลหรือความยินยอมที่จำเป็นจากผู้ใช้อำนาจปกครองตามมาตรา 20 ในกรณีที่ฐานประมวลผลต้องใช้ความยินยอม และโรงเรียนหรือครูผู้รับผิดชอบควรจัดให้ความยินยอมและการแจ้งข้อมูลมีกลไกที่ชัดเจนก่อนเชิญผู้เยาว์เข้าร่วม</p>
+          <p>โปรดไม่ส่งข้อมูลอ่อนไหวที่ไม่จำเป็น เช่น สุขภาพ สถานะครอบครัวหรือเอกสารระบุตัวตนเต็มรูปแบบ เป็นหลักฐาน ถ้าใช้งานขอแก้ตัวและเลื่อนกำหนดหรืออัปโหลดไฟล์ ให้จำกัดข้อมูลเฉพาะที่จำเป็นต่อวัตถุประสงค์ ระบบยังไม่มีการลบข้อมูลผู้เยาว์อัตโนมัติและยังไม่ตรวจสอบหรือกรองข้อมูลอ่อนไหวก่อนอัปโหลด</p>
+        </section>
+
+        <section id="privacy-security">
+          <h2>8. ความมั่นคงปลอดภัยและเหตุละเมิด</h2>
+          <p>ผู้ควบคุมใช้มาตรการเชิงเทคนิคและการจัดการตามความเสี่ยง เช่น รหัสผ่านแฮชด้วย bcrypt เซสชันใน httpOnly cookie การจำกัดอัตราคำขอและการตรวจสิทธิ์ตาม API หากพบความเสี่ยงที่ควรแจ้งตามกฎหมาย ผู้ควบคุมจะประเมินและแจ้ง สคส. และเจ้าของข้อมูลภายในกรอบเวลาที่กฎหมายกำหนดเท่าที่ปรากฏเหตุ</p>
+          <p>ไม่มีเทคโนโลยีใดปลอดภัย 100% กรุณารักษาความลับของรหัสผ่าน ออกจากระบบในอุปกรณ์ร่วม และรายงานเหตุสงสัยไปที่ <a href="mailto:wiraphat.makwong@gmail.com">wiraphat.makwong@gmail.com</a></p>
+        </section>
+
+        <section id="privacy-change">
+          <h2>9. การเปลี่ยนแปลงนโยบาย</h2>
+          <p>นโยบายฉบับนี้อาจปรับให้ตรงกับคุณสมบัติและกฎหมายที่เปลี่ยนไป วันที่ปรับปรุงล่าสุดจะระบุไว้ด้านบน หากมีการเปลี่ยนแปลงที่มีผลต่อสิทธิหรือวัตถุประสงค์อย่างสำคัญ ระบบจะแจ้งทางหน้าเว็บหรือช่องทางที่เหมาะสมก่อนเริ่มประมวลผลที่เกี่ยวข้อง</p>
+        </section>
+      </article>
+    </section>
+
+    <section class="legal-page" data-page="terms" hidden aria-labelledby="terms-title">
+      <article class="legal-document">
+        <header class="legal-header">
+          <p class="legal-eyebrow">Zero Trust</p>
+          <h1 id="terms-title">เงื่อนไขการใช้งาน</h1>
+          <p>มีผลใช้บังคับตั้งแต่ 1 พฤศจิกายน 2569</p>
+        </header>
+        <nav class="legal-toc" aria-label="สารบัญเงื่อนไขการใช้งาน">
+          <h2>สารบัญ</h2>
+          <a href="#/terms#terms-acceptance">การยอมรับ</a>
+          <a href="#/terms#terms-service">บริการและสิทธิการเข้าถึง</a>
+          <a href="#/terms#terms-account">บัญชีและความปลอดภัย</a>
+          <a href="#/terms#terms-conduct">ข้อห้ามและการปฏิบัติ</a>
+          <a href="#/terms#terms-content">เนื้อหาและลิขสิทธิ์</a>
+          <a href="#/terms#terms-trust">ระบบ Trust ก๊วน และการยุติการใช้งาน</a>
+          <a href="#/terms#terms-liability">ความรับผิดและการชดใช้</a>
+          <a href="#/terms#terms-law">กฎหมายและการติดต่อ</a>
+        </nav>
+
+        <section id="terms-acceptance"><h2>1. การยอมรับเงื่อนไข</h2><p>การสมัครเข้าสู่ระบบ เข้าร่วมก๊วน หรือใช้งาน Zero Trust ถือว่าผู้ใช้อ่านเข้าใจและยอมรับเงื่อนไขฉบับนี้รวมทั้งนโยบายความเป็นส่วนตัว หากไม่ยอมรับผู้ใช้ต้องหยุดใช้งานและไม่สร้างบัญชี</p></section>
+        <section id="terms-service">
+          <h2>2. ลักษณะบริการและสิทธิการเข้าถึง</h2>
+          <p>Zero Trust เป็นเครื่องมือจัดการก๊วน งาน ความรับผิดชอบ คะแนน Trust การค้ำประกัน ข้อแก้ตัว กิจกรรม และการจองห้องหรือทรัพยากรตามฟังก์ชันที่เปิดใช้งานจริง บางฟังก์ชันอาจยังอยู่ระหว่างพัฒนา ไม่มีสัญญาว่าส่งผลการเรียนหรือผลการแข่งขันใด ๆ</p>
+          <p>ผู้ดูแลบริการอาจปรับเปลี่ยน ปิดปรับปรุง หรือระงับฟังก์ชันบางส่วนเพื่อความปลอดภัย ความถูกต้อง บำรุงรักษา หรือข้อจำกัดทางเทคนิค โดยพยายามแจ้งล่วงหน้าตามสมควรถ้ามีผลต่อผู้ใช้อย่างกว้างขวาง</p>
+        </section>
+        <section id="terms-account">
+          <h2>3. บัญชีและความปลอดภัย</h2>
+          <p>ผู้ใช้ต้องอายุอย่างน้อย 13 ปีตามการตรวจปีเกิดในระบบ ให้ข้อมูลที่ถูกต้อง ไม่แอบอ้างบุคคลอื่น และใช้บัญชีของตนเอง ผู้เยาว์ควรได้รับการดูแลและยินยอมที่จำเป็นจากผู้ใช้อำนาจปกครองหรือผู้ปกครองสถานศึกษา</p>
+          <p>ผู้ใช้รับผิดชอบการรักษาความปลอดภัยของรหัสผ่าน อุปกรณ์และการเข้าถึงบัญชี แจ้งความผิดปกติที่ <a href="mailto:wiraphat.makwong@gmail.com">wiraphat.makwong@gmail.com</a> ผู้ดูแลอาจจำกัดหรือปิดบัญชีชั่วคราวเมื่อมีเหตุอันควรเชื่อว่ามีการบุกรุก การหลอกลวง การละเมิดสิทธิหรือการใช้งานเกินสิทธิ</p>
+        </section>
+        <section id="terms-conduct">
+          <h2>4. ข้อห้ามและการปฏิบัติที่เหมาะสม</h2>
+          <ul><li>ห้ามใช้ระบบเพื่อคุกคาม ข่มขู่ ดูหมิ่นเลือกปฏิบัติ ล่อลวง หรือเผยแพร่ข้อมูลส่วนตัวโดยไม่ชอบด้วยกฎหมาย</li><li>ห้ามสร้างบัญชีปลอม ใช้โจมตีทางไซเบอร์ หลอกให้เปิดเผยข้อมูล ส่งมัลแวร์ ข้ามสิทธิ ทำงานวนรอบเพื่อลดคะแนนหรือสร้างหลักฐานเท็จ</li><li>ห้ามอัปโหลดไฟล์ที่ไม่มีสิทธิ ใส่เนื้อหาเสื่อมเสีย ลิขสิทธิ์ ผิดกฎหมาย หรือข้อมูลอ่อนไหวเกินจำเป็น</li><li>ห้ามตัดสินหรือเปิดเผยข้อมูลสุขภาพ ระยะทาง ครอบครัวหรือเหตุผลในการขอแก้ตัวและเลื่อนกำหนดต่อผู้ที่ไม่มีสิทธิ และห้ามนำข้อมูลจากระบบไปละเมิดสิทธิผู้อื่น</li><li>ผู้ใช้ต้องปฏิบัติตามกติกาก๊วน ภายในกฎหมายและคำสั่งชอบด้วยกฎหมายของเจ้าหน้าที่หรือสถานศึกษาโดยไม่ส่งผลให้ทำผิดกฎหมายนี้</li></ul>
+        </section>
+        <section id="terms-content">
+          <h2>5. เนื้อหาและทรัพย์สินทางปัญญา</h2>
+          <p>ผู้ใช้ยังเป็นเจ้าของสิทธิในเนื้อหาและไฟล์ที่อัปโหลดเท่าที่กฎหมายอนุญาต โดยเมื่ออัปโหลดหรือแชร์ คุณอนุญาตให้ Zero Trust เก็บ ส่ง คัดลอกชั่วคราวและแสดงเนื้อหาเท่าที่จำเป็นเพื่อให้บริการตามบทบาท สิทธิอนุญาตสิ้นสุดเมื่อเนื้อหาไม่มีความจำเป็นต่อบริการ เว้นแต่ต้องคงไว้ตามกฎหมาย หรือบันทึกถาวรเพื่อความสมบูรณ์ของงานที่ต้องตรวจสอบ</p>
+          <p>ชื่อแบรนด์ โลโก้ รหัส รูปแบบ หน้าตาและซอฟต์แวร์ของ Zero Trust เป็นสิทธิของผู้ให้บริการหรือเจ้าของลิขสิทธิ์ ผู้ใช้ไม่ได้รับสิทธิทำซ้ำ แก้ไข เผยแพร่เชิงพาณิชย์หรือเอาไปใช้เดิมนอกเหนือที่กฎหมายอนุญาต</p>
+        </section>
+        <section id="terms-trust">
+          <h2>6. ก๊วน คะแนน Trust และการยุติการใช้งาน</h2><p>คะแนน Trust เป็นเครื่องมือสะท้อนกิจกรรมภายในระบบ ไม่ใช่ข้อมูลสถิติทางวิชาการ ข้อมูลประกันสุขภาพประวัติอาชญากรรมหรือการรับรองบุคคล เจ้าของหรือผู้ดูแลก๊วนมีหน้าที่ตรวจสอบด้วยหลักฐานที่ระบบรองรับ เจ้าของสามารถปิด ยกเลิกหรือเปิดก๊วนใหม่ตามตัวเลือกของระบบ</p>
+          <p>การออกหรือถูกเตะออกจากก๊วนอาจไม่ลบประวัติงาน รายชื่อกิจกรรมหรือคะแนนที่ใช้รักษาบันทึก ความพยายามยุติสิทธิจะดำเนินตามบทบาทและกฎหมาย และระบบอาจระงับบัญชีหรือเนื้อหาที่ละเมิดเงื่อนไขหรือมีความเสี่ยงต่อความปลอดภัย</p>
+        </section>
+        <section id="terms-liability">
+          <h2>7. การปฏิเสธการรับประกันและความรับผิด</h2><p>บริการจัดให้ “ตามที่เป็นอยู่” และเท่าที่กฎหมายอนุญาต ผู้ให้บริการไม่รับประกันว่าระบบจะไม่มีข้อผิดพลาด ไม่มีการหยุดชะงักหรือข้อมูลจะไม่สูญหาย ผู้ให้บริการไม่รับผิดต่อความเสียหายที่เกิดจากการใช้งานนอกเจตนา การเชื่อมต่อของบุคคลที่สาม ความขัดแย้งของสมาชิก หรือการตัดสินของสถาบันการศึกษา เว้นแต่กฎหมายห้ามข้อจำกัดนั้น</p>
+          <p>หากผู้ให้บริการมีความรับผิดตามกฎหมาย ความรับผิดรวมมีขอบเขตตามมูลค่าและจำนวนที่กฎหมายกำหนดและกรณีเจตนาหรือประมาทเลินเล่อร้ายแรงตามข้อกฎหมายที่บังคับได้เท่านั้น</p>
+        </section>
+        <section id="terms-law">
+          <h2>8. กฎหมายที่ใช้บังคับและการติดต่อ</h2><p>เงื่อนไขฉบับนี้อยู่ภายใต้กฎหมายไทย เว้นแต่กฎหมายคุ้มครองผู้บริโภคหรือกฎหมายที่บังคับจะกำหนดหลักเกณฑ์อันไม่อาจล้มล้างได้เป็นอย่างอื่น ให้ข้อพิพาทมุ่งพิจารณาโดยการเจรจาและข้อพิพาทอาจเข้าสู่ศาลที่มีอำนาจตามกฎหมายก่อนดำเนินคดี</p><p>ผู้ติดต่อ: วีรภัทร มากวงษ์ เจ้าของ zPleum Zero Trust จังหวัดตาก ประเทศไทย อีเมล <a href="mailto:wiraphat.makwong@gmail.com">wiraphat.makwong@gmail.com</a></p></section>
+      </article>
+    </section>
+
+    <section class="page profile-page" data-page="profile" hidden aria-labelledby="profile-title">
+      <a class="back-link" href="#/dashboard"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>กลับไปหน้าก๊วน</a>
+      <h1 id="profile-title">โปรไฟล์ผู้ใช้</h1>
+      <div id="profile-summary" class="workspace-panel"></div>
+      <section class="workspace-panel"><h2>ประวัติ Trust และ Badges</h2><div id="profile-history"></div></section>
     </section>
   </main>
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <a class="footer-logo" href="#/home"><span class="brand-mark"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span><span>Zero Trust</span></a>
+        <p>พื้นที่ทำงานร่วมกันที่พิสูจน์ความรับผิดชอบ ผ่านงาน กิจกรรม และคะแนนความไว้วางใจในก๊วนของคุณ</p>
+      </div>
+      <nav class="footer-links" aria-label="ลิงก์ผลิตภัณฑ์">
+        <h2>ระบบ</h2>
+        <a href="#/dashboard">ก๊วนของฉัน</a>
+        <a href="#/dashboard">งานและสุขภาพทีม</a>
+        <a href="#/dashboard">การจองห้อง</a>
+      </nav>
+      <nav class="footer-links" aria-label="ลิงก์บัญชี">
+        <h2>บัญชี</h2>
+        <a href="#/login">เข้าสู่ระบบ</a>
+        <a href="#/register">สมัครสมาชิก</a>
+        <a href="mailto:wiraphat.makwong@gmail.com">ติดต่อฝ่ายสนับสนุน</a>
+      </nav>
+      <nav class="footer-links" aria-label="ลิงก์นโยบาย">
+        <h2>ข้อมูล</h2>
+        <a href="#/privacy">นโยบายความเป็นส่วนตัว</a>
+        <a href="#/terms">เงื่อนไขการใช้งาน</a>
+        <a href="#/home#about">เกี่ยวกับ Zero Trust</a>
+      </nav>
+    </div>
+    <div class="footer-bottom"><span>© <span data-current-year></span> zPleum. สงวนลิขสิทธิ์ทุกประการ.</span><span>Zero Trust Workspace</span></div>
+  </footer>
 </body>
 </html>

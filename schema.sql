@@ -15,8 +15,8 @@
 -- เพราะโครงสร้างโปรเจกต์ไม่มีโฟลเดอร์ uploads/
 -- =========================================================================
 
-CREATE DATABASE IF NOT EXISTS zero_trust CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE zero_trust;
+CREATE DATABASE IF NOT EXISTS db_std_09_p01 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE db_std_09_p01;
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
