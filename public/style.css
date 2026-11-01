@@ -1,0 +1,271 @@
+/* ==========================================================================
+   Zero Trust 8 Design tokens — source of truth: DESIGN.md
+   แก้ที่ DESIGN.md ก่อนเสมอ แล้วแก้ไฟล์นี้ให้ตรงใน commit เดียวกัน
+   Component ใช้ var(--...) เท่านั้น ห้ามใส่ hex ใน markup, CSS rule หรือ JS
+   ========================================================================== */
+
+:root {
+  /* ---------- Brand (raw) ---------- */
+  --color-primary: #EA580C;
+  --color-primary-action: #C2410C;
+  --color-primary-action-hover: #9A3412;
+  --color-primary-action-pressed: #7C2D12;
+  --color-primary-strong: #C2410C;
+  --color-primary-on-soft: #9A3412;
+  --color-primary-soft: #FFEDD5;
+  --color-primary-glow: #FB923C;
+  --color-primary-soft-dark: #431407;
+
+  /* ---------- Neutrals (raw) ---------- */
+  --color-ink: #1C1917;
+  --color-ink-soft: #292524;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #FAFAF9;
+  --color-surface-muted: #F5F5F4;
+  --color-text-primary: #1C1917;
+  --color-text-secondary: #57534E;
+  --color-text-muted: #78716C;
+  --color-text-inverse: #FFFFFF;
+  --color-border: #E7E5E4;
+  --color-border-strong: #857F7A;
+  --color-border-dark: #44403C;
+  --color-border-strong-dark: #78716C;
+
+  /* ---------- Status (raw, light) ---------- */
+  --color-success: #16A34A;
+  --color-success-text: #15803D;
+  --color-success-soft: #DCFCE7;
+  --color-warning: #B87D02;
+  --color-warning-text: #854D0E;
+  --color-warning-soft: #FEF9C3;
+  --color-error: #DC2626;
+  --color-error-text: #B91C1C;
+  --color-error-soft: #FEE2E2;
+  --color-info: #57534E;
+  --color-info-text: #57534E;
+  --color-info-soft: #F5F5F4;
+
+  /* ---------- Status (raw, dark) ---------- */
+  --color-success-dark: #4ADE80;
+  --color-success-soft-dark: #052E16;
+  --color-warning-dark: #FACC15;
+  --color-warning-soft-dark: #422006;
+  --color-error-dark: #F87171;
+  --color-error-soft-dark: #450A0A;
+  --color-info-dark: #A8A29E;
+  --color-info-text-dark: #D6D3D1;
+  --color-info-soft-dark: #1C1917;
+
+  /* ---------- Semantic roles (สลับตามโหมด — component ใช้กลุ่มนี้) ---------- */
+  --bg: var(--color-surface);
+  --card: var(--color-surface);
+  --card-alt: var(--color-surface-alt);
+  --field-bg: var(--color-surface-muted);
+  --line: var(--color-border);
+  --line-strong: var(--color-border-strong);
+  --fg: var(--color-text-primary);
+  --fg-2: var(--color-text-secondary);
+  --fg-3: var(--color-text-muted);
+  --accent-text: var(--color-primary-strong);
+  --accent-soft: var(--color-primary-soft);
+  --accent-on-soft: var(--color-primary-on-soft);
+  --progress-fill: var(--color-primary);
+  --focus-ring: var(--color-primary-action);
+
+  --status-success: var(--color-success);
+  --status-warning: var(--color-warning);
+  --status-error: var(--color-error);
+  --status-info: var(--color-info);
+  --status-success-text: var(--color-success-text);
+  --status-warning-text: var(--color-warning-text);
+  --status-error-text: var(--color-error-text);
+  --status-info-text: var(--color-info-text);
+  --status-success-soft: var(--color-success-soft);
+  --status-warning-soft: var(--color-warning-soft);
+  --status-error-soft: var(--color-error-soft);
+  --status-info-soft: var(--color-info-soft);
+
+  /* ---------- Typography ---------- */
+  --font-display: "Plus Jakarta Sans", "IBM Plex Sans Thai", system-ui, sans-serif;
+  --font-body: "Inter", "IBM Plex Sans Thai", system-ui, sans-serif;
+
+  --text-display-xl: 5rem;
+  --text-display-l: 4rem;
+  --text-headline: 2.5rem;
+  --text-title: 1.75rem;
+  --text-subhead: 1.25rem;
+  --text-lead: 1.125rem;
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-caption: 0.8125rem;
+  --text-overline: 0.75rem;
+
+  /* ---------- Spacing (n × 4px) ---------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* ---------- Radius ---------- */
+  --radius-none: 0;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* ---------- Elevation (เฉพาะ hover / focus / floating) ---------- */
+  --shadow-card-hover: 0 12px 32px rgba(28, 25, 23, 0.08);
+  --shadow-primary-hover: 0 8px 24px rgba(194, 65, 12, 0.30);
+  --shadow-floating: 0 24px 48px rgba(0, 0, 0, 0.18);
+  --focus-halo: 0 0 0 4px rgba(234, 88, 12, 0.25);
+  --scrim: rgba(28, 25, 23, 0.6);
+
+  /* ---------- Layout ---------- */
+  --container-max: 1280px;
+  --tap-min: 2.75rem;
+  --tile-size: 2.75rem;
+
+  /* ---------- Z-index ---------- */
+  --z-base: 0;
+  --z-sticky: 100;
+  --z-dropdown: 200;
+  --z-drawer: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+
+  /* ---------- Motion ---------- */
+  --dur-fast: 150ms;
+  --dur-base: 200ms;
+  --dur-reveal: 500ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Breakpoints (CSS variables ใช้ใน @media ไม่ได้ — ใช้ค่าตรงนี้):
+   mobile < 640px · tablet 640–1023px · desktop ≥ 1024px · wide ≥ 1280px */
+@media (max-width: 639px) {
+  :root {
+    --text-display-xl: 3rem;
+    --text-display-l: 2.25rem;
+    --text-headline: 1.75rem;
+    --text-title: 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   Dark mode — <html data-theme="dark">
+   ไม่มี shadow ความลึกมาจากชั้น surface + border
+   ========================================================================== */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: var(--color-ink);
+  --card: var(--color-ink-soft);
+  --card-alt: var(--color-ink-soft);
+  --field-bg: var(--color-ink);
+  --line: var(--color-border-dark);
+  --line-strong: var(--color-border-strong-dark);
+  --fg: #FAFAF9;
+  --fg-2: #D6D3D1;
+  --fg-3: #A8A29E;
+  --accent-text: var(--color-primary-glow);
+  --accent-soft: var(--color-primary-soft-dark);
+  --accent-on-soft: var(--color-primary-glow);
+  --progress-fill: var(--color-primary-glow);
+  --focus-ring: var(--color-primary-glow);
+
+  --status-success: var(--color-success-dark);
+  --status-warning: var(--color-warning-dark);
+  --status-error: var(--color-error-dark);
+  --status-info: var(--color-info-dark);
+  --status-success-text: var(--color-success-dark);
+  --status-warning-text: var(--color-warning-dark);
+  --status-error-text: var(--color-error-dark);
+  --status-info-text: var(--color-info-text-dark);
+  --status-success-soft: var(--color-success-soft-dark);
+  --status-warning-soft: var(--color-warning-soft-dark);
+  --status-error-soft: var(--color-error-soft-dark);
+  --status-info-soft: var(--color-info-soft-dark);
+
+  --shadow-card-hover: none;
+  --shadow-primary-hover: none;
+  --shadow-floating: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+html {
+  font-size: 100%; /* เคารพการตั้งค่าขนาดตัวอักษรของผู้ใช้ — ใช้ rem เสมอ */
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+/* Thai: line-height สูงขึ้น, letter-spacing 0, ตัดคำตามพจนานุกรมเบราว์เซอร์ */
+:lang(th) {
+  letter-spacing: 0;
+  word-break: normal;
+  line-height: 1.7;
+}
+:lang(th) :is(h1, h2, h3, h4) {
+  line-height: 1.3;
+}
+/* Thai ไม่เล็กกว่า 14px: Caption 13px → 14px */
+:lang(th) {
+  --text-caption: 0.875rem;
+}
+
+/* ตัวเลขเรียงตรงหลัก: เวลา ราคา เลขที่นั่ง คะแนน เปอร์เซ็นต์ */
+.num,
+time,
+[data-numeric] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ห้ามลบ focus indicator */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Hover เฉพาะอุปกรณ์ที่ hover ได้ */
+@media (hover: hover) {
+  .card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-3px);
+  }
+}
+
+/* Reduced motion: ตัด translate, reveal, underline animation, skeleton pulse */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition-property: color, background-color, border-color, opacity !important;
+    transition-duration: 0.01ms !important;
+  }
+  .card:hover {
+    transform: none;
+  }
+}
