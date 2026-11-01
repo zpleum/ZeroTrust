@@ -34,6 +34,7 @@
           <i class="fa-regular fa-clock" aria-hidden="true"></i>
           <time class="server-clock" data-server-clock aria-live="off">กำลังซิงก์เวลา…</time>
         </div>
+        <a class="icon-btn" href="#/profile/me" aria-label="โปรไฟล์ของฉัน" title="โปรไฟล์ของฉัน"><i class="fa-solid fa-user" aria-hidden="true"></i></a>
         <button type="button" class="icon-btn" id="notification-button" aria-label="การแจ้งเตือน"><i class="fa-solid fa-bell" aria-hidden="true"></i><span id="notification-count" hidden></span></button>
         <button type="button" class="icon-btn" id="sfx-toggle" aria-pressed="false" aria-label="เปิดเสียงระบบ"><i class="fa-solid fa-volume-xmark" aria-hidden="true"></i></button>
         <button type="button" class="icon-btn theme-toggle" id="theme-toggle" aria-pressed="false" aria-label="สลับเป็นโหมดมืด">
@@ -565,9 +566,14 @@
 
     <section class="page profile-page" data-page="profile" hidden aria-labelledby="profile-title">
       <a class="back-link" href="#/dashboard"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>กลับไปหน้าก๊วน</a>
-      <h1 id="profile-title">โปรไฟล์ผู้ใช้</h1>
-      <div id="profile-summary" class="workspace-panel"></div>
-      <section class="workspace-panel"><h2>ประวัติ Trust และ Badges</h2><div id="profile-history"></div></section>
+      <div class="dashboard-heading"><h1 id="profile-title">โปรไฟล์ผู้ใช้</h1><button id="profile-refresh" class="secondary-button" type="button"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i>รีเฟรช</button></div>
+      <p id="profile-status" class="form-status" role="status"></p>
+      <div id="profile-summary" class="profile-identity"></div>
+      <div id="profile-details" hidden>
+        <section class="profile-section" aria-labelledby="profile-squads-title"><h2 id="profile-squads-title">ความไว้ใจในแต่ละก๊วน</h2><p class="muted">คะแนนแยกตามก๊วน แสดงเฉพาะก๊วนที่คุณมีสิทธิ์ดู</p><div id="profile-squads"></div></section>
+        <section class="profile-section" aria-labelledby="profile-badges-title"><h2 id="profile-badges-title">เหรียญที่ได้รับ</h2><div id="profile-badges" class="badge-row"></div></section>
+        <section class="profile-section" aria-labelledby="profile-history-title"><h2 id="profile-history-title">ประวัติความไว้ใจล่าสุด</h2><p class="muted">แสดงล่าสุดไม่เกิน 30 รายการจากก๊วนที่คุณมีสิทธิ์ดู</p><div id="profile-history"></div></section>
+      </div>
     </section>
   </main>
   <footer class="site-footer">

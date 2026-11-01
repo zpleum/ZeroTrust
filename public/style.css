@@ -871,7 +871,26 @@ progress:indeterminate { background: linear-gradient(90deg, var(--surface-2) 30%
 .social-list { display: grid; gap: 0.75rem; margin-top: 1rem; }
 .social-item { padding: 0.875rem 0; border-bottom: 1px solid var(--line); }
 .profile-page { width: min(calc(100% - 2rem), 50rem); }
+.profile-identity { display: flex; align-items: flex-start; gap: clamp(1rem, 3vw, 2rem); padding-block: 1.5rem 2.5rem; }
+.profile-avatar { width: 5rem; height: 5rem; flex: 0 0 5rem; font-size: 2rem; }
+.profile-identity-copy { min-width: 0; overflow-wrap: anywhere; }
+.profile-identity-copy h2 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.5rem); line-height: 1.3; }
+.profile-bio { max-width: 65ch; white-space: pre-wrap; margin-top: 1rem; color: var(--fg-2); }
+.profile-section { border-top: 1px solid var(--line); padding-block: 1.75rem; }
+.profile-section h2 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+.profile-squad-row, .profile-history-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding-block: 1rem; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.profile-squad-row > div, .profile-history-row > div { min-width: 0; }
+.profile-history-row h3 { font-size: 1rem; margin: 0; }
+.profile-squad-row p, .profile-history-row p { margin: 0.3rem 0 0; }
+.profile-name-link { color: var(--accent-text); text-decoration: underline; text-underline-offset: 0.22em; font-weight: 700; }
+.profile-name-link:hover { color: var(--accent-hover); }
+.profile-trust { color: var(--accent-text); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.profile-event-score { display: grid; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
 @media (max-width: 639px) { .social-tabs { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 420px) {
+  .profile-avatar { width: 3.5rem; height: 3.5rem; flex-basis: 3.5rem; font-size: 1.4rem; }
+  .profile-squad-row { flex-wrap: wrap; gap: 0.5rem; }
+}
 
 /* Legal and public information pages */
 .legal-page { width: min(calc(100% - 2rem), var(--container)); margin-inline: auto; padding-block: 3rem; }

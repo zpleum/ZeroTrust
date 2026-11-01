@@ -674,20 +674,73 @@ async function routeApp() {
     return;
   }
   const squadMatch = /^squad\/(\d+)$/.exec(route);
-  const profileMatch = /^profile\/(\d+)$/.exec(route);
+  const profileMatch = /^profile\/(\d+|me)$/.exec(route);
   if (profileMatch) {
     showPage("profile");
+    const summary = document.querySelector("#profile-summary");
+    const details = document.querySelector("#profile-details");
+    details.hidden = true;
+    summary.replaceChildren(spinner("กำลังโหลดโปรไฟล์…"));
+    summary.setAttribute("aria-busy", "true");
+    message("profile-status", "");
+    for (const id of ["profile-squads", "profile-badges", "profile-history"]) document.getElementById(id).replaceChildren();
     try {
-      const data = await apiRequest(`/api/v1/users/${profileMatch[1]}/profile`);
-      const profile = data.profile || {};
-      const summary = document.querySelector("#profile-summary");
-      summary.replaceChildren(node("h2", profile.display_name || profile.username || "ผู้ใช้"), node("p", `@${profile.username || "unknown"}`, "muted"));
+      let userId = profileMatch[1];
+      if (userId === "me") {
+        const { user } = await apiRequest("/api/v1/auth/me");
+        if (version !== routeVersion) return;
+        userId = user.id;
+      }
+      const { profile } = await apiRequest(`/api/v1/users/${userId}/profile`);
+      if (version !== routeVersion) return;
+      const name = profile.display_name || profile.username;
+      const identity = node("div", null, "profile-identity-copy");
+      identity.append(node("h2", name), node("p", `@${profile.username}`, "muted"));
+      if (profile.is_self) identity.append(node("span", "โปรไฟล์ของคุณ", "badge"));
+      identity.append(node("p", profile.bio || "ยังไม่ได้เพิ่มข้อความแนะนำตัว", "profile-bio"));
+      const avatar = node("span", initial(name), "avatar profile-avatar");
+      avatar.setAttribute("aria-hidden", "true");
+      summary.replaceChildren(avatar, identity);
+      const memberships = profile.memberships || [];
+      const squadNames = new Map(memberships.map(member => [String(member.squad_id), member.squad_name]));
+      const squads = document.querySelector("#profile-squads");
+      for (const member of memberships) {
+        const row = node("article", null, "profile-squad-row");
+        const info = node("div");
+        const link = node("a", member.squad_name, "profile-name-link");
+        link.href = `#/squad/${member.squad_id}`;
+        info.append(link, node("p", roleLabels[member.role] || member.role, "muted"));
+        row.append(info, node("strong", `Trust ${member.trust_score ?? "—"} / 100`, "profile-trust"));
+        squads.append(row);
+      }
+      if (!memberships.length) squads.append(node("p", "ยังไม่มีก๊วนที่เข้าร่วมและยอมรับกฎแล้ว", "muted"));
+      const badges = document.querySelector("#profile-badges");
+      for (const item of profile.badges || []) {
+        const earned = node("span", `${item.badge_key} · ${squadNames.get(String(item.squad_id)) || "ก๊วน"}`, "badge");
+        earned.title = `ได้รับเมื่อ ${formatDate(item.awarded_at)}`;
+        badges.append(earned);
+      }
+      if (!badges.childElementCount) badges.append(node("p", "ยังไม่มีเหรียญในก๊วนที่แสดง", "muted"));
       const history = document.querySelector("#profile-history");
-      history.replaceChildren();
-      for (const event of profile.events || []) history.append(node("p", `${event.event_type || "Trust"}: ${event.delta || 0} (${formatDate(event.created_at)})`));
-      if (!(profile.events || []).length) history.append(node("p", "ยังไม่มีประวัติ Trust", "muted"));
-      for (const badge of profile.badges || []) history.append(node("span", badge.badge_key || "badge", "badge"));
-    } catch (error) { message("profile-title", error.message, true); }
+      const eventLabels = { TASK_ON_TIME: "ส่งงานตรงเวลา", TASK_LATE: "ส่งงานช้า", SNITCH_GUILTY: "ผลพิจารณารายงาน", VOUCH_SUCCESS: "ค้ำประกันสำเร็จ", VOUCH_FAILED: "ค้ำประกันไม่สำเร็จ" };
+      for (const event of profile.events || []) {
+        const row = node("article", null, "profile-history-row");
+        const text = node("div");
+        text.append(node("h3", eventLabels[event.event_type] || event.event_type), node("p", `${squadNames.get(String(event.squad_id)) || "ก๊วน"} · ${formatDate(event.created_at)}`, "muted"));
+        const delta = Number(event.delta);
+        const score = node("div", null, "profile-event-score");
+        score.append(node("strong", `${delta > 0 ? "+" : ""}${delta}`), node("span", `คงเหลือ ${event.score_after}`, "muted"));
+        row.append(text, score);
+        history.append(row);
+      }
+      if (!history.childElementCount) history.append(node("p", "ยังไม่มีประวัติความไว้ใจในก๊วนที่แสดง", "muted"));
+      details.hidden = false;
+    } catch (error) {
+      if (version !== routeVersion) return;
+      summary.replaceChildren();
+      message("profile-status", error.status === 404 ? "ไม่พบผู้ใช้ หรือคุณไม่ได้อยู่ในก๊วนร่วมกับผู้ใช้นี้" : error.message, true);
+      if (error.status === 401) location.hash = "#/login";
+    } finally { if (version === routeVersion) summary.setAttribute("aria-busy", "false"); }
     return;
   }
   if (route === "dashboard" || squadMatch) {
@@ -841,6 +894,7 @@ function initAuth() {
     } finally { button.disabled = false; workspaceButton.disabled = false; }
   });
   window.addEventListener("hashchange", routeApp);
+document.querySelector("#profile-refresh")?.addEventListener("click", routeApp);
 document.querySelector("#notification-button")?.addEventListener("click", loadNotifications);
 initButtonSounds();
 document.querySelector("#social-create")?.setAttribute("aria-controls", "social-form");
@@ -989,7 +1043,14 @@ function renderMembers() {
       badge(statusLabels[member.status] || member.status, null, "state", member.status),
       badge(`Trust ${member.trust_score ?? "—"}`, "shield-halved", "trust")
     );
-    text.append(node("h3", name), node("p", `@${member.username}`), meta);
+    const heading = node("h3");
+    if (member.status === "active" && member.rules_accepted_at) {
+      const link = node("a", name, "profile-name-link");
+      link.href = `#/profile/${member.user_id}`;
+      link.setAttribute("aria-label", `ดูโปรไฟล์ ${name}`);
+      heading.append(link);
+    } else heading.textContent = name;
+    text.append(heading, node("p", `@${member.username}`), meta);
     info.append(node("span", initial(name), "avatar"), text);
     row.append(info);
     if (isAdmin() && member.role !== "owner" && Number(member.user_id) !== Number(workspace.member.user_id)) {
